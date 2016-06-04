@@ -44,8 +44,9 @@ func TestGenerateToken(t *testing.T) {
 		BodyLength  int64
 		Output      string
 	}{
-		{"kool_key", "super_sekret", timestamp, "POST", "/", query, 15, "SXB4cRvOemW20ZIXdfzCuuXZ/MTSBQU8vfVaxEzfwp8="},
-		{"kool_key", "super_sekret", timestamp, "POST", "/some_route", query, 15, "QF7azjnnDFrucZnr1wn7ePz0yxkKBsWTcypg03vk1DY="},
+		//TODO: validate hashes
+		{"kool_key", "super_sekret", timestamp, "POST", "/", query, 15, "bMlnMRQ8epVfLzkdR76fCL/QxYc1yz5kX2tL/6r0BCI="},
+		{"kool_key", "super_sekret", timestamp, "POST", "/some_route", query, 15, "pLF3Apie1dv8Wv8AMdLSKw2w3SNLMx3ARmqWR2MLowI="},
 	}
 	for i, test := range tests {
 		actual := generateToken(test.AppKey, test.AppKey, test.Timestamp, test.Method, test.Path, test.QueryString, test.BodyLength)

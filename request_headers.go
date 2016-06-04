@@ -1,5 +1,5 @@
 package securerequest
 
-const authAppHeader = "auth_app"
-const authTimestampHeader = "auth_timestamp"
-const authSignatureHeader = "auth_signature"
+const AuthAppHeader = "auth_app"
+const AuthTimestampHeader = "auth_timestamp"
+const AuthSignatureHeader = "auth_signature"

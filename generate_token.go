@@ -14,10 +14,7 @@ func generateToken(appKey, appSecret string, timestamp time.Time, method string,
 	token := normalizeToken(appKey, appSecret, timestamp, method, path, query, bodyLength)
 
 	hasher := sha256.New()
-	err := hasher.Write(token)
-	if err != nil {
-		panic(err)
-	}
+	hasher.Write(token)
 	return base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 }
 

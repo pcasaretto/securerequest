@@ -1,6 +1,7 @@
 package securerequest
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -11,13 +12,16 @@ const defaultPeriod = 15 * time.Second
 // Validate validates if a request has the appropriate authentication information
 // It ignore requests othen than GET, POST, PUT, PATCH and DELETE
 func Validate(r *http.Request, appSecrets map[string]string) bool {
+	if appSecrets == nil {
+		return false
+	}
 	switch r.Method {
 	case "GET", "POST", "PUT", "PATCH", "DELETE":
 	default:
-		return false
+		return true
 	}
 
-	appKey := r.Header.Get(authAppHeader)
+	appKey := r.Header.Get(AuthAppHeader)
 	if appKey == "" {
 		return false
 	}
@@ -27,7 +31,7 @@ func Validate(r *http.Request, appSecrets map[string]string) bool {
 		return false
 	}
 
-	timestamp := r.Header.Get(authTimestampHeader)
+	timestamp := r.Header.Get(AuthTimestampHeader)
 	if timestamp == "" {
 		return false
 	}
@@ -35,12 +39,12 @@ func Validate(r *http.Request, appSecrets map[string]string) bool {
 	if err != nil {
 		return false
 	}
-	t := time.Unix(0, int64(timeV*1000)) // micro to nano
+	t := time.Unix(int64(timeV/1000), int64(timeV%1000))
 
-	if time.Now().Sub(t) > defaultPeriod {
+	if math.Abs(float64(timestampGenerator().Sub(t))) > float64(defaultPeriod) {
 		return false
 	}
-	signature := r.Header.Get(authSignatureHeader)
+	signature := r.Header.Get(AuthSignatureHeader)
 
-	return signature == generateToken(appKey, secret, t, r.Method, r.URL.Path, r.Form, r.ContentLength)
+	return signature == tokenGenerator(appKey, secret, t, r.Method, r.URL.Path, r.URL.Query(), r.ContentLength)
 }
