@@ -8,6 +8,7 @@ import (
 
 func TestNormalizeToken(t *testing.T) {
 	timestamp := time.Date(2016, time.May, 1, 0, 0, 0, 0, time.UTC)
+	empty_query := make(url.Values)
 	query, _ := url.ParseQuery("z_param=z_value&m_param=m_value&a_param=a_value")
 	tests := []struct {
 		AppKey      string
@@ -19,6 +20,8 @@ func TestNormalizeToken(t *testing.T) {
 		BodyLength  int64
 		Output      string
 	}{
+		{"kool_key", "super_sekret", timestamp, "POST", "/", empty_query, 0, "app=kool_key&secret=kool_key&method=POST&path=/&t=1462060800000"},
+		{"kool_key", "super_sekret", timestamp, "POST", "/", empty_query, 15, "app=kool_key&secret=kool_key&method=POST&path=/&t=1462060800000&body_length=15"},
 		{"kool_key", "super_sekret", timestamp, "POST", "/", query, 15, "app=kool_key&secret=kool_key&method=POST&path=/&t=1462060800000&a_param=a_value&m_param=m_value&z_param=z_value&body_length=15"},
 		{"kool_key", "super_sekret", timestamp, "POST", "/some_route", query, 15, "app=kool_key&secret=kool_key&method=POST&path=/some_route&t=1462060800000&a_param=a_value&m_param=m_value&z_param=z_value&body_length=15"},
 	}

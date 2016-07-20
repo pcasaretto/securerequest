@@ -83,6 +83,7 @@ func addTableTests(tests *[]example, template example) {
 		{"bogus", false},
 		{timestampHeader(timestamp.Add(20 * time.Second)), false},
 		{timestampHeader(timestamp.Add(-20 * time.Second)), false},
+		{timestampHeader(timestamp.Add(15 * time.Second)), true},
 		{timestampHeader(timestamp.Add(time.Second)), true},
 		{timestampHeader(timestamp), true},
 	}

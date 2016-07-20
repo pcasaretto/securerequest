@@ -1,7 +1,6 @@
 package securerequest
 
 import (
-	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -41,7 +40,8 @@ func Validate(r *http.Request, appSecrets map[string]string) bool {
 	}
 	t := time.Unix(int64(timeV/1000), int64(timeV%1000))
 
-	if math.Abs(float64(timestampGenerator().Sub(t))) > float64(defaultPeriod) {
+	diff := timestampGenerator().Sub(t)
+	if diff > defaultPeriod || diff < -defaultPeriod {
 		return false
 	}
 	signature := r.Header.Get(AuthSignatureHeader)
