@@ -11,6 +11,12 @@ type ValidatingHandler struct {
 // NewValidatingHandler takes a http.Handler and a app -> secret map and
 // returns a ValidatingHandler that uses the given secrets to validate requests
 func NewValidatingHandler(h http.Handler, appSecrets map[string]string) *ValidatingHandler {
+	if h == nil {
+		panic("securerequest: handler should not be nil")
+	}
+	if appSecrets == nil || len(appSecrets) == 0 {
+		panic("securerequest: appSecrets should not be nil or empty")
+	}
 	return &ValidatingHandler{h, appSecrets}
 }
 
