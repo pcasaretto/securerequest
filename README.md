@@ -13,7 +13,7 @@ Both sides, client and server must know the applications which will communicate 
 You can Sign requests yourself.
 
 ```go
-err := securerequest.Sign(request, "app_key", "super_sekret")
+securerequest.Sign(request, "app_key", "super_sekret")
 ``` 
 
 or you can you use SigningRoundTripper with your http.Client
@@ -30,7 +30,7 @@ client.Do(req)
 Validate requests manually
 
 ```go
-valid, err := securerequest.Validate(request, secrets)
+valid := securerequest.Validate(request, secrets)
 ```
 
 or use ValidatingHandler as a middleware for your existing handler
