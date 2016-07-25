@@ -20,7 +20,7 @@ func NewValidatingHandler(h http.Handler, appSecrets map[string]string) *Validat
 	return &ValidatingHandler{h, appSecrets}
 }
 
-const unauthorizedMessage = "Unauthorized access."
+const UnauthorizedMessage = "Unauthorized access."
 
 // ServeHTTP validates requests. If a request passes validation it passes along
 // to the next Handler. If it doesn't it will respond with 403 and plain-text
@@ -29,7 +29,7 @@ func (vh *ValidatingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !Validate(r, vh.appSecrets) {
 		w.Header().Add("Content-Type", "plain-text")
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(unauthorizedMessage))
+		w.Write([]byte(UnauthorizedMessage))
 		return
 	}
 	vh.handler.ServeHTTP(w, r)
